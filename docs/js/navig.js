@@ -1398,65 +1398,9 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
-var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
-
-function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
-
-var Paginator = function () {
-  function Paginator() {
-    _classCallCheck(this, Paginator);
-
-    this.scrollEvents();
-    this.clickEvents();
-    this.activeSlide = 0;
-    this.canGo = 1;
-    this.max = 4;
-  }
-
-  _createClass(Paginator, [{
-    key: 'scrollEvents',
-    value: function scrollEvents() {
-      var self = this;
-      $(window).on('wheel', function (e) {
-        if (!self.canGo) return;
-        self.canGo = false;
-        e = e.originalEvent;
-        var direction = e.deltaY > 0 ? 1 : -1;
-
-        var newslide = self.activeSlide + direction;
-
-        // корректируе перелистывания за рамки всего слайдов
-        if (newslide > self.max - 1) newslide = self.max - 1;
-        if (newslide < 0) newslide = 0;
-
-        if (self.activeSlide !== newslide) PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
-
-        self.activeSlide = newslide;
-        setTimeout(function () {
-          self.canGo = true;
-        }, 1800);
-      });
-    }
-  }, {
-    key: 'clickEvents',
-    value: function clickEvents() {
-      var self = this;
-      $('.pagination a').on('click', function (e) {
-        if (!self.canGo) return;
-
-        var newslide = $(this).data('gotoslide');
-        console.log('click --> newslide:', newslide);
-        if (newslide !== self.activeSlide) {
-          PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
-          self.activeSlide = newslide;
-        }
-      });
-    }
-  }]);
-
-  return Paginator;
-}();
-
-module.exports = Paginator;
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ae57ebcf.js","/")
+PubSub.subscribe('gotoslide', function (msg, data) {
+    $('.pagination a').removeClass('is-active');
+    $('[data-gotoslide="' + data.to + '"]').addClass('is-active');
+});
+}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_8bc29285.js","/")
 },{"Wb8Gej":3,"buffer":2}]},{},[5])

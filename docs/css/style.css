@@ -17,21 +17,22 @@ body {
 .section-1, .section-2, .section-3, .section-4 {
   height: 100vh;
   width: 100%;
-  background: #000;
   position: absolute;
   left: 0;
-  top: 0;
+  top: 100px;
   padding: 10vw;
-  opacity: 0; }
-  .section-1:nth-child(even), .section-2:nth-child(even), .section-3:nth-child(even), .section-4:nth-child(even) {
-    background: #00d0a0; }
+  opacity: 1;
+  clip: rect 0px, 0, 0, 0; }
   .section-1 h2, .section-2 h2, .section-3 h2, .section-4 h2 {
     font-family: 'Josefin Sans', sans-serif;
     font-size: 80px;
     margin-bottom: 1em; }
   .section-1 span, .section-2 span, .section-3 span, .section-4 span {
     position: absolute;
-    left: 4em; }
+    left: 1em; }
+
+.section-3, .section-4 {
+  opacity: 0; }
 
 p {
   display: inline-block;
@@ -42,7 +43,7 @@ p {
 
 .pagination {
   position: fixed;
-  top: 100px;
+  top: 20%;
   left: 50px;
   z-index: 100; }
   .pagination li {

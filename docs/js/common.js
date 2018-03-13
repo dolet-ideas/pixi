@@ -50474,8 +50474,11 @@ let pixiSpriteToFullImg = function (PSprite) {
 };
 var animation = function (a, b) {
 
-    bg = PIXI.Sprite.fromImage(massImg[a]);
-    bg2 = PIXI.Sprite.fromImage(massImg[b]);
+    if (a < b) c='up' 
+        else c = 'down';
+
+    let bg = PIXI.Sprite.fromImage(massImg[a]);
+    let bg2 = PIXI.Sprite.fromImage(massImg[b]);
     
     bg.anchor.x = 0.5;
     bg.anchor.y = 0.5;
@@ -50534,24 +50537,30 @@ var animation = function (a, b) {
         
         pixiSpriteToFullImg(bg);
         pixiSpriteToFullImg(bg2);
-        
+     
+
+
         t1
-        .to(obj, 0.7, {
+        .to(obj, 0.8, {
             a: 1, ease: Power3.easeOut, onUpdate: () => {
+                let udl = 1;
+                let udr = 1;
+                c == 'up' ? udl = obj.a : udr = obj.a
+
                 let middle = (obj.a * obj.a + obj.a) / 2;
                 thing.clear();
                 
                 thing.beginFill(0x8bc5ff, 0.4);
                 thing.moveTo(0, 0);
                 thing.lineTo(width, 0);
-                thing.lineTo(width, height * obj.a * obj.a);
-                thing.lineTo(0, height * obj.a);
+                thing.lineTo(width, height * obj.a * udl);
+                thing.lineTo(0, height * obj.a * udr);
 
                 let rect = "rect(" + height * middle + "px," + width + "px," + height + "px,0)";
                 let rect2 = "rect(" + 0 + "px," + width + "px," + height * middle + "px,0)";
 
-                $(".section-1").css("clip", rect);
-                $(".section-2").css("clip", rect2);
+                $('.section-1').css('clip', rect);
+                $('.section-2').css('clip', rect2);
 
             }
         })
@@ -50614,7 +50623,8 @@ PubSub.subscribe('gotoslide',(msg,data)=>{
     // $('[data-slide=' + data.from + ']').css({ opacity: 0 });
     // $('[data-slide=' + data.to + ']').css({opacity:1});
     // console.log('to GO => ', data);
-    
+    // console.log('==>',msg,data);
+ 
     animation(data.from, data.to)
     
 })
@@ -50746,7 +50756,7 @@ var a = new _paginator2.default();
 //     .to(bg2.position, 1, { y: "+=100" }, 0)
 //     .to(bg2.scale, 2, { x: "+=0.2", y: "+=0.2" }, 1);
 // })
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ba4acc4b.js","/")
+}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_ae6b4522.js","/")
 },{"./animator":193,"./navig":195,"./paginator":196,"Wb8Gej":4,"buffer":3,"gsap":12,"pixi.js":151,"pubsub-js":185}],195:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 PubSub.subscribe('gotoslide',function (msg,data) {
@@ -50765,22 +50775,25 @@ class Paginator {
       this.max = 4;
   }
   scrollEvents(){
-    var self = this;
+    let self = this;
       $(window).on('wheel', function (e) {
+
+        let scrollUpDown;
+        // let direction;
         if (!self.canGo) return;
         self.canGo = false;
         e = e.originalEvent;
-        var direction = e.deltaY>0?1:-1;
+        let direction = e.deltaY>0?1:-1;
+
         
-        var newslide = self.activeSlide + direction;
-   
-        
-        // корректируе перелистывания за рамки всего слайдов
+        let newslide = self.activeSlide + direction;   
+
+        // корректируе перелистывания за рамки всего слайдов        
         if (newslide > (self.max-1)) newslide = self.max-1;
-        if (newslide < 0) newslide = 0;
-         
-        if (self.activeSlide !== newslide)         
-        PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
+        if (newslide < 0) newslide = 0;         
+        if (self.activeSlide !== newslide)
+          PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide});
+        // PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
 
         self.activeSlide = newslide;
         setTimeout(() => {

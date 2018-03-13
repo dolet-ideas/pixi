@@ -1396,149 +1396,70 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
 }).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../node_modules/ieee754/index.js","/../../node_modules/ieee754")
 },{"Wb8Gej":3,"buffer":2}],5:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
-"use strict";
+'use strict';
 
-var pixiSpriteToFullImg = function pixiSpriteToFullImg(PSprite) {
-    // PSprite - PIXI.Sprite
-    var windowAspect = width / height;
-    var imageAspect = PSprite.width / PSprite.height;
+var _createClass = function () { function defineProperties(target, props) { for (var i = 0; i < props.length; i++) { var descriptor = props[i]; descriptor.enumerable = descriptor.enumerable || false; descriptor.configurable = true; if ("value" in descriptor) descriptor.writable = true; Object.defineProperty(target, descriptor.key, descriptor); } } return function (Constructor, protoProps, staticProps) { if (protoProps) defineProperties(Constructor.prototype, protoProps); if (staticProps) defineProperties(Constructor, staticProps); return Constructor; }; }();
 
-    if (windowAspect > imageAspect) {
-        PSprite.width = width;
-        PSprite.height = width / imageAspect;
-    } else {
-        PSprite.height = height;
-        PSprite.width = height * imageAspect;
+function _classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
+
+var Paginator = function () {
+  function Paginator() {
+    _classCallCheck(this, Paginator);
+
+    this.scrollEvents();
+    this.clickEvents();
+    this.activeSlide = 0;
+    this.canGo = 1;
+    this.max = 4;
+  }
+
+  _createClass(Paginator, [{
+    key: 'scrollEvents',
+    value: function scrollEvents() {
+      var self = this;
+      $(window).on('wheel', function (e) {
+
+        var scrollUpDown = void 0;
+        // let direction;
+        if (!self.canGo) return;
+        self.canGo = false;
+        e = e.originalEvent;
+        var direction = e.deltaY > 0 ? 1 : -1;
+
+        var newslide = self.activeSlide + direction;
+
+        // корректируе перелистывания за рамки всего слайдов        
+        if (newslide > self.max - 1) newslide = self.max - 1;
+        if (newslide < 0) newslide = 0;
+        if (self.activeSlide !== newslide) PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
+        // PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
+
+        self.activeSlide = newslide;
+        setTimeout(function () {
+          self.canGo = true;
+        }, 1800);
+      });
     }
-};
-var animation = function animation(a, b) {
+  }, {
+    key: 'clickEvents',
+    value: function clickEvents() {
+      var self = this;
+      $('.pagination a').on('click', function (e) {
+        if (!self.canGo) return;
 
-    bg = PIXI.Sprite.fromImage(massImg[a]);
-    bg2 = PIXI.Sprite.fromImage(massImg[b]);
-
-    bg.anchor.x = 0.5;
-    bg.anchor.y = 0.5;
-
-    bg.position.x = renderer.width / 2;
-    bg.position.y = renderer.height / 2;
-
-    stage.addChild(bg);
-    ///////////////
-
-    var stage2 = new PIXI.Container();
-
-    bg2.anchor.x = 0.5;
-    bg2.anchor.y = 0.5;
-
-    stage2.position.x = renderer.width / 2;
-    stage2.position.y = renderer.height / 2;
-
-    stage2.addChild(bg2);
-
-    stage.addChild(stage2);
-    //////////////////////
-    // let's create a moving shape
-    thing = new PIXI.Graphics();
-    stage.addChild(thing);
-
-    thing.beginFill(0x8bc5ff, 0.4);
-    thing.moveTo(0, 0);
-    thing.lineTo(width, 0);
-    thing.lineTo(width, height * 0);
-    thing.lineTo(0, height * 0);
-
-    stage2.mask = thing;
-
-    // var count = 0;
-
-    // $('body').on('click', () => {
-
-
-    var t1 = new TimelineMax({ onUpdate: function onUpdate() {
-            renderer.render(stage);
-        } });
-    var obj = { a: 0 };
-
-    bg2.position.y -= 100;
-    // console.log('00000---');
-
-    bg.position.x = renderer.width / 2;
-    bg.position.y = renderer.height / 2;
-
-    // console.log("pan", bg2.scale.x, bg2.scale.y);
-
-
-    bg2.scale.x = 1;
-    bg2.scale.y = 1;
-    thing.clear;
-
-    pixiSpriteToFullImg(bg);
-    pixiSpriteToFullImg(bg2);
-
-    t1.to(obj, 0.7, {
-        a: 1, ease: Power3.easeOut, onUpdate: function onUpdate() {
-            var middle = (obj.a * obj.a + obj.a) / 2;
-            thing.clear();
-
-            thing.beginFill(0x8bc5ff, 0.4);
-            thing.moveTo(0, 0);
-            thing.lineTo(width, 0);
-            thing.lineTo(width, height * obj.a * obj.a);
-            thing.lineTo(0, height * obj.a);
-
-            var rect = "rect(" + height * middle + "px," + width + "px," + height + "px,0)";
-            var rect2 = "rect(" + 0 + "px," + width + "px," + height * middle + "px,0)";
-
-            $(".section-1").css("clip", rect);
-            $(".section-2").css("clip", rect2);
+        var newslide = $(this).data('gotoslide');
+        console.log('click --> newslide:', newslide);
+        if (newslide !== self.activeSlide) {
+          PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
+          self.activeSlide = newslide;
         }
-    }).to(bg.position, 0.8, { y: "+=100" }, 0).to(bg2.position, 1, { y: "+=100" }, 0).to(bg2.scale, 1.5, { x: "+=0.018", y: "+=0.018" }, 1);
-};
+      });
+    }
+  }]);
 
-var width = $(window).width();
-var height = $(window).height();
+  return Paginator;
+}();
 
-console.log('your display - width:', width);
-console.log('your display - height:', height);
-
-var loader = PIXI.loader;
-var bg, bg2, thing;
-var massImg = ["img/1.jpg", "img/2.jpg", "img/3.jpg", "img/4.jpg"];
-
-var renderer = PIXI.autoDetectRenderer(width, height, { antialias: true });
-document.body.appendChild(renderer.view);
-
-// create the root of the scene graph
-var stage = new PIXI.Container();
-
-loader.add('a', 'img/1.jpg').add('b', 'img/2.jpg').add('c', 'img/3.jpg').add('d', 'img/4.jpg');
-
-loader.load(function (loader, resources) {
-    // console.log('width---->', bg.width, resources.a.texture);    
-    // Рисую первую загрузку
-    bg = new PIXI.Sprite(resources.a.texture);
-
-    bg.anchor.x = 0.5;
-    bg.anchor.y = 0.5;
-
-    bg.position.x = renderer.width / 2;
-    bg.position.y = renderer.height / 2;
-
-    pixiSpriteToFullImg(bg);
-
-    stage.addChild(bg);
-    renderer.render(stage);
-});
-
-stage.interactive = true;
-
-PubSub.subscribe('gotoslide', function (msg, data) {
-
-    // $('[data-slide=' + data.from + ']').css({ opacity: 0 });
-    // $('[data-slide=' + data.to + ']').css({opacity:1});
-    // console.log('to GO => ', data);
-
-    animation(data.from, data.to);
-});
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_32130946.js","/")
+module.exports = Paginator;
+}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_6cb49f2d.js","/")
 },{"Wb8Gej":3,"buffer":2}]},{},[5])

@@ -7,22 +7,25 @@ class Paginator {
       this.max = 4;
   }
   scrollEvents(){
-    var self = this;
+    let self = this;
       $(window).on('wheel', function (e) {
+
+        let scrollUpDown;
+        // let direction;
         if (!self.canGo) return;
         self.canGo = false;
         e = e.originalEvent;
-        var direction = e.deltaY>0?1:-1;
+        let direction = e.deltaY>0?1:-1;
+
         
-        var newslide = self.activeSlide + direction;
-   
-        
-        // корректируе перелистывания за рамки всего слайдов
+        let newslide = self.activeSlide + direction;   
+
+        // корректируе перелистывания за рамки всего слайдов        
         if (newslide > (self.max-1)) newslide = self.max-1;
-        if (newslide < 0) newslide = 0;
-         
-        if (self.activeSlide !== newslide)         
-        PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
+        if (newslide < 0) newslide = 0;         
+        if (self.activeSlide !== newslide)
+          PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide});
+        // PubSub.publish('gotoslide', { from: self.activeSlide, to: newslide });
 
         self.activeSlide = newslide;
         setTimeout(() => {

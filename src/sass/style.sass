@@ -5,7 +5,7 @@ body
  font-family: Helvetica,sans-serif
  overflow: hidden
  height: 100vh
-=fh1
+=fh2
  font-family: 'Courgette', cursive
 =ftxt
  font-family: 'Josefin Sans', sans-serif
@@ -20,20 +20,17 @@ body
     top: 0
     right: 0
     padding: 20px
-    +fh1
+    +fh2
+
 .section-1,.section-2,.section-3,.section-4
     height: 100vh
     width: 100%
-    background: #000
     position: absolute
     left: 0
-    top: 0
+    top: 100px
     padding: 10vw
-    opacity: 0
-    &.is-active
-        opacity: 
-    &:nth-child(even)    
-        background: #00d0a0
+    opacity: 1
+    clip: rect (0px,0,0,0)
     h2
         +ftxt
         font-size: 80px
@@ -41,7 +38,17 @@ body
         position: 
     span 
         position: absolute
-        left: 4em
+        left: 1em
+// .section-1
+//     opacity: 1
+//     clip: rect(height px,width px,heightpx,0)";
+
+// .section-2
+//     background: blue
+
+.section-3, .section-4
+    opacity: 0
+
 p 
     display: inline-block
     width: 30%
@@ -52,7 +59,7 @@ p
 
 .pagination
     position: fixed
-    top: 100px
+    top: 20%
     left: 50px
     z-index: 100
  
