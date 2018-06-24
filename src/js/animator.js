@@ -14,7 +14,7 @@ let pixiSpriteToFullImg = function (PSprite) {
 };
 var animation = function (a, b) {
 
-    if (a < b) c='up' 
+    if (a > b) c='up' 
         else c = 'down';
 
     let bg = PIXI.Sprite.fromImage(massImg[a]);
@@ -99,8 +99,8 @@ var animation = function (a, b) {
                 let rect = "rect(" + height * middle + "px," + width + "px," + height + "px,0)";
                 let rect2 = "rect(" + 0 + "px," + width + "px," + height * middle + "px,0)";
 
-                $('.section-1').css('clip', rect);
-                $('.section-2').css('clip', rect2);
+                $('.section-'+(a+1)).css('clip', rect);
+                $('.section-'+(b+1)).css('clip', rect2);
 
             }
         })
@@ -116,6 +116,14 @@ let height = $(window).height();
 
 console.log('your display - width:', width);
 console.log('your display - height:', height);
+
+// Закроем сразу лишнии
+let rectx = "rect(" + height + "px," + width + "px," + height + "px,0)";
+$('.section-2').css('clip', rectx);
+$('.section-3').css('clip', rectx);
+$('.section-4').css('clip', rectx);
+
+
 
 var loader = PIXI.loader;
 var bg, bg2,  thing;

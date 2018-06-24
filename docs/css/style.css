@@ -31,9 +31,6 @@ body {
     position: absolute;
     left: 1em; }
 
-.section-3, .section-4 {
-  opacity: 0; }
-
 p {
   display: inline-block;
   width: 30%;

@@ -125,8 +125,8 @@ var lookup = 'ABCDEFGHIJKLMNOPQRSTUVWXYZabcdefghijklmnopqrstuvwxyz0123456789+/';
 	exports.fromByteArray = uint8ToBase64
 }(typeof exports === 'undefined' ? (this.base64js = {}) : exports))
 
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../node_modules/browserify/node_modules/base64-js/lib/b64.js","/../../node_modules/browserify/node_modules/base64-js/lib")
-},{"Wb8Gej":3,"buffer":2}],2:[function(require,module,exports){
+}).call(this,require("gzNCgL"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\..\\node_modules\\browserify\\node_modules\\base64-js\\lib\\b64.js","/..\\..\\node_modules\\browserify\\node_modules\\base64-js\\lib")
+},{"buffer":2,"gzNCgL":3}],2:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 /*!
  * The buffer module from node.js, for the browser.
@@ -1238,8 +1238,8 @@ function assert (test, message) {
   if (!test) throw new Error(message || 'Failed assertion')
 }
 
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../node_modules/browserify/node_modules/buffer/index.js","/../../node_modules/browserify/node_modules/buffer")
-},{"Wb8Gej":3,"base64-js":1,"buffer":2,"ieee754":4}],3:[function(require,module,exports){
+}).call(this,require("gzNCgL"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\..\\node_modules\\browserify\\node_modules\\buffer\\index.js","/..\\..\\node_modules\\browserify\\node_modules\\buffer")
+},{"base64-js":1,"buffer":2,"gzNCgL":3,"ieee754":4}],3:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 // shim for using process in browser
 
@@ -1305,8 +1305,8 @@ process.chdir = function (dir) {
     throw new Error('process.chdir is not supported');
 };
 
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../node_modules/browserify/node_modules/process/browser.js","/../../node_modules/browserify/node_modules/process")
-},{"Wb8Gej":3,"buffer":2}],4:[function(require,module,exports){
+}).call(this,require("gzNCgL"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\..\\node_modules\\browserify\\node_modules\\process\\browser.js","/..\\..\\node_modules\\browserify\\node_modules\\process")
+},{"buffer":2,"gzNCgL":3}],4:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 exports.read = function (buffer, offset, isLE, mLen, nBytes) {
   var e, m
@@ -1393,8 +1393,8 @@ exports.write = function (buffer, value, offset, isLE, mLen, nBytes) {
   buffer[offset + i - d] |= s * 128
 }
 
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/../../node_modules/ieee754/index.js","/../../node_modules/ieee754")
-},{"Wb8Gej":3,"buffer":2}],5:[function(require,module,exports){
+}).call(this,require("gzNCgL"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/..\\..\\node_modules\\ieee754\\index.js","/..\\..\\node_modules\\ieee754")
+},{"buffer":2,"gzNCgL":3}],5:[function(require,module,exports){
 (function (process,global,Buffer,__argument0,__argument1,__argument2,__argument3,__filename,__dirname){
 'use strict';
 
@@ -1413,7 +1413,7 @@ var pixiSpriteToFullImg = function pixiSpriteToFullImg(PSprite) {
 };
 var animation = function animation(a, b) {
 
-    if (a < b) c = 'up';else c = 'down';
+    if (a > b) c = 'up';else c = 'down';
 
     var bg = PIXI.Sprite.fromImage(massImg[a]);
     var bg2 = PIXI.Sprite.fromImage(massImg[b]);
@@ -1495,8 +1495,8 @@ var animation = function animation(a, b) {
             var rect = "rect(" + height * middle + "px," + width + "px," + height + "px,0)";
             var rect2 = "rect(" + 0 + "px," + width + "px," + height * middle + "px,0)";
 
-            $('.section-1').css('clip', rect);
-            $('.section-2').css('clip', rect2);
+            $('.section-' + (a + 1)).css('clip', rect);
+            $('.section-' + (b + 1)).css('clip', rect2);
         }
     }).to(bg.position, 0.8, { y: "+=100" }, 0).to(bg2.position, 1, { y: "+=100" }, 0).to(bg2.scale, 1.5, { x: "+=0.018", y: "+=0.018" }, 1);
 };
@@ -1506,6 +1506,12 @@ var height = $(window).height();
 
 console.log('your display - width:', width);
 console.log('your display - height:', height);
+
+// Закроем сразу лишнии
+var rectx = "rect(" + height + "px," + width + "px," + height + "px,0)";
+$('.section-2').css('clip', rectx);
+$('.section-3').css('clip', rectx);
+$('.section-4').css('clip', rectx);
 
 var loader = PIXI.loader;
 var bg, bg2, thing;
@@ -1547,5 +1553,5 @@ PubSub.subscribe('gotoslide', function (msg, data) {
 
     animation(data.from, data.to);
 });
-}).call(this,require("Wb8Gej"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_e4f99ef3.js","/")
-},{"Wb8Gej":3,"buffer":2}]},{},[5])
+}).call(this,require("gzNCgL"),typeof self !== "undefined" ? self : typeof window !== "undefined" ? window : {},require("buffer").Buffer,arguments[3],arguments[4],arguments[5],arguments[6],"/fake_c2971f2.js","/")
+},{"buffer":2,"gzNCgL":3}]},{},[5])
